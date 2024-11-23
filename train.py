@@ -6,8 +6,8 @@ import torch.optim as optim
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
-from visual_utils import *
 
+from visual_utils import *
 from models import get_model #our models 
 from dataset import LabeledDataset
 from torch.utils.data import DataLoader
