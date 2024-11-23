@@ -1,6 +1,6 @@
 ## CMSC472_Final_Project
 
-This project is about classifying UMD buildings. So far, we have 3300 labeled images for this project.
+This project is about classifying UMD buildings (11 buildings). So far, we have 3300 labeled images for this project.
 
 Update: 11/22/2024, it is possible we might need to change the structure of the project, or not.
 I haven't have the time to run the code, please check it yourself. We did supervised learning, .....
