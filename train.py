@@ -169,7 +169,7 @@ if __name__ == "__main__":
 
     train_with_metrics(model, train_loader, val_loader, test_loader, criterion, optimizer, Config)
 
-    #TODO: try it yourself
+    #TODO: try it yourself or move this somewhere. Remember to do from visual_utils import *
     # num_images = 10  # Total number of images to display
     # # Randomly sample 10 unique indices from the dataset
     # indices = np.random.choice(len(test_dataset), size=num_images, replace=False)
