@@ -1,6 +1,9 @@
 import numpy as np
 import torch
 import cv2
+import warnings
+# Suppress FutureWarnings
+warnings.filterwarnings("ignore", category=FutureWarning, message="Using a non-full backward hook when the forward contains multiple autograd Nodes is deprecated")
 
 #This is for visualizing the 
 #If you find this code not good, fix it please. Appriciated.
