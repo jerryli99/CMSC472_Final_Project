@@ -20,6 +20,7 @@ from tqdm import tqdm # for progress bar stuff
 
 class Config: #TODO: might change something here
     DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    MODEL_NAME = "resnet18"
     EPOCHS = 10
     LR = 0.001
     BATCH_SIZE = 32
@@ -148,6 +149,8 @@ if __name__ == "__main__":
     parser.add_argument("--test_data", type=str, required=True, help="Path to testing data.")
     parser.add_argument("--pretrained", action="store_true", help="Use pretrained weights.") # not required
     args = parser.parse_args()
+
+    Config.MODEL_NAME = args.model_name #for saving .pth
 
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
