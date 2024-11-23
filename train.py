@@ -16,6 +16,8 @@ from tqdm import tqdm # for progress bar stuff
 
 # If you don't like the layout of the code, fix it. Appriciated :)
 
+#TODO: If the code is wrong, fix it
+
 class Config: #TODO: might change something here
     DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     EPOCHS = 10
@@ -57,6 +59,7 @@ def train_with_metrics(model,
         metrics = checkpoint['metrics']
         best_val_acc = checkpoint['best_val_acc']
 
+    # Training epoch starts here...
     for epoch in range(start_epoch, config.EPOCHS):
         model.train()
         train_loss, correct, total = 0.0, 0, 0
@@ -143,7 +146,7 @@ if __name__ == "__main__":
     parser.add_argument("--train_data", type=str, required=True, help="Path to training data.")
     parser.add_argument("--val_data", type=str, required=True, help="Path to validation data.")
     parser.add_argument("--test_data", type=str, required=True, help="Path to testing data.")
-    parser.add_argument("--pretrained", action="store_true", help="Use pretrained weights.")
+    parser.add_argument("--pretrained", action="store_true", help="Use pretrained weights.") # not required
     args = parser.parse_args()
 
     Config.MODEL_NAME = args.model_name
@@ -182,7 +185,7 @@ if __name__ == "__main__":
 
     #     # Dynamically set the target class from label
     #     target_class = label.item()
-
+    #TODO: Need to change the layer name 
     #     grad_cam1 = GradCAMPlusPlus(model, 'conv1')
     #     cam1 = grad_cam1.generate(input_image, target_class=target_class)
 

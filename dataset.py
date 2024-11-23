@@ -1,7 +1,6 @@
 import os
 from PIL import Image
 from torch.utils.data import Dataset
-from torchvision import transforms
 
 class LabeledDataset(Dataset):
     def __init__(self, root_dir, class_keywords, transform=None):

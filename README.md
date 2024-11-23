@@ -2,11 +2,8 @@
 
 This project is about classifying UMD buildings. So far, we have 3300 labeled images for this project.
 
-
-We did supervised learning, .....
-
-
-We used GradCam and GradCam++ to visualize where the Network is focusing.
+As of 11/22/2024, it is possible we might need to change the structure of the project, or not.
+I haven't have the time to run the code, please check it yourself. We did supervised learning, .....
 
 
-Image Data is stored in Google Drive. 
+We used GradCam and GradCam++ to visualize where the Network is focusing. Image Data is stored in Google Drive. 
