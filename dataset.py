@@ -27,8 +27,6 @@ class LabeledDataset(Dataset):
                 if file.endswith((".jpg", ".jpeg", ".JPG")):
                     self.image_paths.append(os.path.join(root, file))
 
-        # Collect unique integer labels
-        self.unique_labels = self._get_unique_integer_labels()
 
     def __len__(self):
         return len(self.image_paths)
