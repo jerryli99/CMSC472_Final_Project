@@ -149,7 +149,6 @@ if __name__ == "__main__":
     parser.add_argument("--pretrained", action="store_true", help="Use pretrained weights.") # not required
     args = parser.parse_args()
 
-    Config.MODEL_NAME = args.model_name
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
