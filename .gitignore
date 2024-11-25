@@ -162,3 +162,7 @@ cython_debug/
 #.idea/
 
 checkpoint.pth
+fixmatch
+data
+canli_run.txt
+result
