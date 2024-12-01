@@ -23,3 +23,6 @@ Update: 11/28/2024, added vision transformer as our model to train on classifica
 
 
 Update: 11/29/2024, added GradCam and GradCam++ methods to visualize vision transformer layers. FixMatch is still not doing good. Need to either fix or move on and try other methods.
+
+
+Update: 11/30/2024, implemented MeanTeacher, got some gradcam results. The results are quite interesting that the gradcam shows us the neural network is looking at the right places and building parts, but we have a test acc of around 54% for student and teacher models. Well, the data we used for this quick 20 classification experiment is from the fixmatch photos, where the number of labeled images are very little like 10-20 per building, and the rest of the thousand photos are regarded as unlabeled. We decided to increase the labeled images like 2 times, so 40-ish labeled images per building, and see how it goes. It is possible we might do some data augmentation to some unlabeled data and see how it goes out in MeanTeacher.
