@@ -38,4 +38,4 @@ Update: 12/2/2024, just training different pretrained models like resnet18, vgg1
 Update: 12/3/2024, explored about GNN. Specifically, learned something about superpixels and how to use graphs to represent images. It was interesting but overly complex; thus, do it if we have time. However, in a general sense, using GNNs for image classification sounds a little weird in our case.
 
 
-Update: 12/4/2024, quick update: currently running supervised stuff, used resnet18, 34, 50; vgg11, 16, 19; densenet121, 201; ViT16_224; and the best ones we have for classifying 20 different UMD buildings are resnet18,34 and densenet121,201 models. ViT16_224 does not seem to be a good idea. 
+Update: 12/4/2024, quick update: currently running supervised stuff, used resnet18, 34, 50; vgg11, 16, 19; densenet121, 201; ViT16_224; and the best ones we have for classifying 20 different UMD buildings are resnet18,34 and densenet121,201 models with about 88% test acc. ViT16_224 does not seem to be a good idea with 42% test acc. 
