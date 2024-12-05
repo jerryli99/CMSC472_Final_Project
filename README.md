@@ -2,7 +2,7 @@
 
 Progress log:
 
-This project is about classifying UMD buildings (20 buildings). So far, we have close to 4000 labeled images for this project.
+This project is about classifying UMD buildings (20 buildings). So far, we have around 5000 images for this project.
 
 
 Update: 10/24/2024 to 11/12/2024, taking images of UMD buildings, coding GradCam, obtaining results from training small amounts of data to determine the number of images needed. For example, used resnet18 to train on 5 classes (total of 400 images ish) and see what GradCam is showing use. 
