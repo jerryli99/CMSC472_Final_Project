@@ -1,0 +1,197 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+%     \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2024
+
+
+% ready for submission
+\usepackage[final]{neurips_2024}
+
+
+% to compile a preprint version, e.g., for submission to arXiv, add add the
+% [preprint] option:
+%     \usepackage[preprint]{neurips_2024}
+
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+%     \usepackage[final]{neurips_2024}
+
+
+% to avoid loading the natbib package, add option nonatbib:
+%    \usepackage[nonatbib]{neurips_2024}
+
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{graphicx}       % graphics (added by Jeffery)
+\usepackage{float}          % float (added by Jeffery)
+
+
+\title{ UMD Building Classification Proposal }
+
+\author{%
+  Can Li \\
+  \texttt{c5405@umd.edu} \\
+  \And 
+  Jeffery Tian \\
+  \texttt{jtian12@umd.edu} \\
+  \And 
+  Jerry Li\\
+  \texttt{jli103@umd.edu} \\
+  \And 
+  Christopher Lim \\
+  \texttt{clim0326@umd.edu} \\
+  \And 
+  Justin Zhao \\
+  \texttt{justinfz@umd.edu} \\
+}
+
+
+\begin{document}
+
+
+\maketitle
+
+
+\begin{abstract}
+  We propose that, given an input image of a UMD building, we can classify the building with the correct name in close to realtime using CNN image segmentation and classification methods. What makes this project valuable for educational purposes is that we will explore how to build our image database from scratch, experiment with different convolution neural networks, different ways to visualize the CNN layers for debugging our network design and potentially even for segmentation, and utilizing semi-supervised learning.
+\end{abstract}
+
+
+\section{Motivation}
+\label{motivation}
+
+
+The primary motivator for this project lies in the challenge of combined segmentation of multiple buildings in an image and the subsequent classification of them, while also segmenting and accounting for foreground blocking objects (eg. pedestrians, trees, cars). While from a purely practical standpoint it's true that buildings are mapped (eg. Google Maps) already, this still represents a strong "AR-like" result.
+
+
+\subsection{Related Works}
+
+Much work has been done with relation to image segmentation of multiple relevant objects (eg. buildings) and their classification.
+
+\begin{itemize}
+    \item On the topic of image recognition/classification, AlexNet, VGG, and Resnet are strong examples of traditional CNN recognition and classification models. We intend to build on their techniques.
+    \item With respect to image segmentation, we may end up using Grad-CAM/Score-CAM as detailed after this section. However, we will compare with traditional segmentation techniques as detailed in class (proposals and culling, and we can implement something similar to U-Net)
+\end{itemize}
+
+This also includes significant work being done on visual explanations of CNN models via Selvaraju, et al.\ (2019) Grad-CAM and other related works. These can be used as an alternative method of segmentation and recognition. Below we discuss the main works of relevance to our work:
+
+% Write: how gradcam can help find the location of the building in the image (to help find its not on the foreground images), point out how this isn't the case in prelim
+
+\begin{itemize} % IP: Gradcam, Scorecam, Gradcam++
+    \item Grad-CAM, Selvaraju, et al.\ (2019), uses the final gradient into the last convolution layer to produce a visual representation of strength in decision making. This is a visual indicator of model strength and is on paper highly useful for highlighting image classification confidence, but can also be used to help define segmentation. 
+    % https://arxiv.org/abs/1610.02391 gradcam
+    \item Grad-CAM++, Chattopadhay, et al.\ (2018) is an upgrade to Grad-CAM by generalizing it. It can then isolate/identify multiple object instances in a single image (important for our proposal due to the presence of multiple buildings in images) and a generally improved visual indicator. 
+    % https://arxiv.org/abs/1710.11063 gradcam++
+    \item Score-CAM, Wang, et al.\ (2020) is an alternative approach to Grad-CAM that completely discards using the gradient and instead evaluates the weight of each activation map in the forward pass. 
+    % https://arxiv.org/abs/1910.01279 scorecam
+\end{itemize}
+
+Grad-CAM++ and Score-CAM can both be used as an important means for highlighting image classification confidence, both of which we intend to use as the most advanced methods in their respective lineages. As an example, see our preliminary original Grad-CAM results in Figure 1 on instances on our test set, where Grad-CAM indicates it's making predictions based on unrelated objects (foreground foliage, people, unrelated elements of the building). This can be used for confirmation of model confidence. If the model is sufficiently confident, this can even be used as a means to indicate building locations (especially given Grad-CAM++ ability to find multiple instances) within the image rather than using traditional segmentation techniques.
+
+Figure 2 (attached to the appendix) has examples utilizing Grad-CAM++ on architecture similar to ResNet.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.3\linewidth]{fig1.png}
+    \caption{Preliminary Grad-CAM results}
+    \label{fig:prelim_results_1}
+\end{figure}
+
+\subsection{Motivation for Proposed Methods}
+
+From these prior works we have the basic motivation of leveraging traditional CNN image segmentation and recognition techniques for the sake of identifying any buildings in the input images. Our main innovation is to attempt to use Grad-CAM++ or a similar technique to see if they can be used for image segmentation instead, and to attempt to apply this basic system to a variety of goals.
+
+\section{Proposed Approach}
+\label{approach}
+
+\subsection{Data Collection}
+
+All data will be collected by group members individually. We plan to select a set of UMD buildings (at least 10-15) for the classification. Each building will have at least 50 images taken using our phones from different angles, distances, and lighting (eg. time of day). We plan to do data augmentation for the buildings. 
+
+Preprocessing will be done to normalize/resize images to a standard, strip metadata, and we will also consider color segmenting the building out of the image (eg. filtering out possible noise from the sky/foreground, although this will have the detriment of making it less robust). We also consider using alternative encodings; HSV may help given the UMD red-brown brick style
+
+Should the dataset be large, it can be proposed to train multiple models and utilize model averaging/ensemble voting to merge.
+
+\subsection{Paradigm}
+
+We intend to use a CNN architecture, loosely based around existing methods, in a semi-supervised format. We can use MeanTeacher or FixMatch for the method of semi-supervised learning.
+
+It's also possible to use a graph based method and a GNN. It would be interesting to attempt this by using labeled/unlabled samples as nodes, and should this perform reasonably this can be used as a primary paradigm as well.
+
+Training can be done on Google Colab, but we also have the option of using a training server (SAIL @ Columbia)
+
+\section{Expected Plan}
+\label{plan}
+
+\subsection{Timeline}
+
+\begin{enumerate}
+    \item Nov 1 - We intend to have the dataset ready. At the time of writing we have \verb|~|1k photos before augmentation and processing.
+    \item Mid Nov - We want to ensure we have image classification trained correctly on building recognition for simple cases (single buildings with noise and on various conditions). 
+    \item End Nov - Hyper parameter tuning/Grad-CAM++/Score-CAM visualizations to improve the performance of the CNN architecture. Ensure via Grad-CAM that the model is confident and attempt preliminary segmentation on multiple instances and find confidence.
+    \item December - Utilize alternative segmentation methods (Grad-CAM/Score-CAM lineage) and alternative architecture (GNNs) and compare with our results.
+\end{enumerate}
+
+Note - preliminary results indicate that Score-CAM may be too slow to be ideal on our set.
+
+% chronological plans
+
+\subsection{Moonshot Goals}
+
+% Show a 3D version of the UMD building given by a 2D image as input.
+% Take all images of all UMD buildings, including the building interiors, for classification.
+% Based on our database of images, generate an image that represents UMD building styles using diffusion models.
+% video?\
+
+We have a variety of higher level goals for our project beyond just the basic plan. \begin{itemize}
+    \item First, should our model performance be tuned to be sufficiently fast, we would like to be able to apply it to videos. Sampling a video at 5-10 fps and passing it through the video is a simple way to accomplish this given enough performance.
+    \item Being able to classify all buildings on UMD (there are a lot of them) rather than just those in the central dataset. 
+    \item Being able to identify architectural styles beyond just building names. If the model is sufficiently confident we could even write a model to generate representative images of UMD architecture using a diffusion model (a long shot because it requires massive architecture changes)
+    \item Reconstruct a 3-D model of the building using a 2-D model as input (eg. not just classification but an understanding of what the building actually looks like - this is a long shot because it would likely require a lot of data and huge paradigm changes)
+    \item Interior identification of buildings (much harder due to a potential lack of distinguishing features)
+\end{itemize}
+
+\newpage 
+\appendix
+
+\section{Extra Figures}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{fig2.png}
+    \caption{Preliminary Results with structure from ResNet}
+    \label{fig:prelim_results_2}
+\end{figure}
+
+\section*{References}
+\label{cites}
+
+\medskip
+
+
+{
+\small
+
+% Cite format MLA 9 - Jeffery
+[1] Krizhevsky, Alex, et al. “ImageNet Classification with Deep Convolutional Neural Networks.” Communications of the ACM, vol. 60, no. 6, May 2012, pp. 84–90, proceedings.neurips.cc/paper\_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf.
+
+[2] Simonyan, Karen, and Andrew Zisserman. “Very Deep Convolutional Networks for Large-Scale Image Recognition.” ArXiv.org, 10 Apr. 2015, arxiv.org/abs/1409.1556.
+
+[3] He, Kaiming, et al. “Deep Residual Learning for Image Recognition.” ArXiv.org, arXiv, 10 Dec. 2015, arxiv.org/abs/1512.03385.
+
+[4] Selvaraju, Ramprasaath R., et al. “Grad-CAM: Visual Explanations from Deep Networks via Gradient-Based Localization.” International Journal of Computer Vision, vol. 128, no. 2, Feb. 2020, pp. 336–59, https://doi.org/10.1007/s11263-019-01228-7.
+
+[5] Chattopadhay, Aditya, et al. “Grad-CAM++: Generalized Gradient-Based Visual Explanations for Deep Convolutional Networks.” 2018 IEEE Winter Conference on Applications of Computer Vision (WACV), Mar. 2018, https://doi.org/10.1109/wacv.2018.00097.
+
+[6] Wang, Haofan, et al. “Score-CAM: Score-Weighted Visual Explanations for Convolutional Neural Networks.” ArXiv:1910.01279 [Cs], Apr. 2020, arxiv.org/abs/1910.01279.
+
+\end{document}
