@@ -83,3 +83,14 @@ def slicify(image: np.ndarray, n_segments: int = 50, compactness: int = 10, radi
     )
     data = transform(image)
     return data
+
+def slicify_images(images: np.ndarray, n_segments: int = 50, compactness: int = 10, radius: float = 10.0, max_neighbors: int = 32) -> list:
+    transform = T.Compose(
+        [
+            T.ToTensor(), 
+            ToSLIC(n_segments=n_segments, compactness=compactness),
+            RadiusGraph(r=radius, max_num_neighbors=max_neighbors)
+        ]
+    )
+    data_list = [transform(image) for image in images]
+    return data_list

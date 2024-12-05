@@ -12,10 +12,15 @@ from torch_geometric.data import Data
 from utils import *
 
 # ------------------- SLIC ------------------- #
-IMAGE_DIR = './'
+IMAGE_DIR = './in/'
 SIZE = (224, 224)
-N_SEGMENTS = 500
-COMPACTNESS = 1
+N_SEGMENTS = 750
+COMPACTNESS = .5
+RADIUS_FACTOR = 1/8
+MAX_NEIGHBORS = 32
+
+SCALE = 10
+EDGE_WIDTH = 5
 
 print('Loading data...')
 
@@ -23,30 +28,31 @@ print('Loading data...')
 images = load_dir(IMAGE_DIR)  # Replace with the path to your image directory
 images = [cv2.resize(image, SIZE) for image in images]
 
-sample_image = images[0]
+for sample_image, i in zip(images, range(len(images))):
+    slicified = slicify(sample_image, n_segments=N_SEGMENTS, compactness=COMPACTNESS, radius=SIZE[0]*RADIUS_FACTOR, max_neighbors=MAX_NEIGHBORS)
 
-slicified = slicify(sample_image, n_segments=N_SEGMENTS, compactness=COMPACTNESS, radius=SIZE[0]//8, max_neighbors=32)
+    print(slicified)
 
-print(slicified)
+    slicified_image = superpixels_to_2d_image(rec=slicified, scale=SCALE, edge_width=EDGE_WIDTH, size_tuple=SIZE, bg=sample_image)
+    slicified_graph = superpixels_to_2d_image(rec=slicified, scale=SCALE, edge_width=EDGE_WIDTH, size_tuple=SIZE, bg=None)
 
-slicified_image = superpixels_to_2d_image(rec=slicified, scale=10, edge_width=5, size_tuple=SIZE, bg=sample_image)
-slicified_graph = superpixels_to_2d_image(rec=slicified, scale=10, edge_width=5, size_tuple=SIZE, bg=None)
+    # plot the 3 images
+    plt.figure(figsize=(15, 5))
+    plt.subplot(131)
+    plt.imshow(sample_image)
+    plt.title('Original Image')
+    plt.axis('off')
 
-# plot the 3 images
-plt.figure(figsize=(15, 15))
-plt.subplot(131)
-plt.imshow(sample_image)
-plt.title('Original Image')
-plt.axis('off')
+    plt.subplot(132)
+    plt.imshow(slicified_image)
+    plt.title('Superpixels')
+    plt.axis('off')
 
-plt.subplot(132)
-plt.imshow(slicified_image)
-plt.title('Superpixels')
-plt.axis('off')
+    plt.subplot(133)
+    plt.imshow(slicified_graph)
+    plt.title('Graph Connectivity')
+    plt.axis('off')
 
-plt.subplot(133)
-plt.imshow(slicified_graph)
-plt.title('Graph Connectivity')
-plt.axis('off')
+    plt.savefig(f'./slic_{i}.png')
 
-plt.show()
+    # plt.show()
