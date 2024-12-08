@@ -1,0 +1,54 @@
+\begin{thebibliography}{10}
+
+\bibitem{chattopadhay}
+A.~Chattopadhay, A.~Sarkar, P.~Howlader, and V.~N. Balasubramanian.
+\newblock Grad-cam++: Generalized gradient-based visual explanations for deep convolutional networks.
+\newblock In {\em 2018 IEEE Winter Conference on Applications of Computer Vision (WACV)}, pages 839--847, 2018.
+
+\bibitem{epflSLICSuperpixels}
+EPFL.
+\newblock {S}{L}{I}{C} {S}uperpixels --- epfl.ch.
+\newblock \url{https://www.epfl.ch/labs/ivrl/research/slic-superpixels/}.
+\newblock [Accessed 08-12-2024].
+
+\bibitem{he}
+K.~He, X.~Zhang, S.~Ren, and J.~Sun.
+\newblock Deep residual learning for image recognition.
+\newblock 2015.
+
+\bibitem{krizhevsky}
+A.~Krizhevsky, I.~Sutskever, and G.~E. Hinton.
+\newblock Imagenet classification with deep convolutional neural networks.
+\newblock {\em Commun. ACM}, 60(6):84–90, May 2017.
+
+\bibitem{long}
+J.~Long, Z.~yan, and H.~chen.
+\newblock A graph neural network for superpixel image classification.
+\newblock {\em Journal of Physics: Conference Series}, 1871(1):012071, apr 2021.
+
+\bibitem{selvaraju}
+R.~R. Selvaraju, M.~Cogswell, A.~Das, R.~Vedantam, D.~Parikh, and D.~Batra.
+\newblock Grad-cam: Visual explanations from deep networks via gradient-based localization.
+\newblock 2020.
+
+\bibitem{simonyan}
+K.~Simonyan and A.~Zisserman.
+\newblock Very deep convolutional networks for large-scale image recognition.
+\newblock 2015.
+
+\bibitem{sohn}
+K.~Sohn, D.~Berthelot, C.-L. Li, Z.~Zhang, N.~Carlini, E.~D. Cubuk, A.~Kurakin, H.~Zhang, and C.~Raffel.
+\newblock Fixmatch: Simplifying semi-supervised learning with consistency and confidence.
+\newblock 2020.
+
+\bibitem{tarvainen}
+A.~Tarvainen and H.~Valpola.
+\newblock Weight-averaged consistency targets improve semi-supervised deep learning results.
+\newblock {\em CoRR}, abs/1703.01780, 2017.
+
+\bibitem{wang}
+H.~Wang, Z.~Wang, M.~Du, F.~Yang, Z.~Zhang, S.~Ding, P.~Mardziel, and X.~Hu.
+\newblock Score-cam: Score-weighted visual explanations for convolutional neural networks.
+\newblock 2020.
+
+\end{thebibliography}

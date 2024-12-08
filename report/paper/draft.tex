@@ -3,11 +3,7 @@
 % if you need to pass options to natbib, use, e.g.:
 %     \PassOptionsToPackage{numbers, compress}{natbib}
 % before loading neurips_2024
-
-
-% ready for submission
-\usepackage[final]{neurips_2024}
-
+\PassOptionsToPackage{numbers, compress}{natbib}
 
 % to compile a preprint version, e.g., for submission to arXiv, add add the
 % [preprint] option:
@@ -19,7 +15,7 @@
 
 
 % to avoid loading the natbib package, add option nonatbib:
-%    \usepackage[nonatbib]{neurips_2024}
+\usepackage[final]{neurips_2024}
 
 
 \usepackage[utf8]{inputenc} % allow utf-8 input
@@ -34,8 +30,7 @@
 \usepackage{graphicx}       % graphics (added by Jeffery)
 \usepackage{float}          % float (added by Jeffery)
 
-
-\title{ UMD Building Classification Proposal }
+\title{ UMD Building Classification }
 
 \author{%
   Can Li \\
@@ -69,31 +64,44 @@
 \section{Motivation}
 \label{motivation}
 
+Although not addressing an urgent problem, our goal was to gain experience with the entire deep learning lifecycle, from data acquisition to final model evaluation. We built our own image database from scratch and conducted extensive experiments with a variety of supervised and semi-supervised learning models to ensure the highest accuracy.
 
-The primary motivator for this project lies in the challenge of combined segmentation of multiple buildings in an image and the subsequent classification of them, while also segmenting and accounting for foreground blocking objects (eg. pedestrians, trees, cars). While from a purely practical standpoint it's true that buildings are mapped (eg. Google Maps) already, this still represents a strong "AR-like" result.
+The challenge came from the fact that we had to build our own dataset from scratch. We additionally worked with implementation of high resolution images on limited datasets to semi-supervised methods, along with the use of Grad-CAM and Score-CAM for image segmentation.
 
+We additionally did experiments on GNNs and HITL with Grad-CAM.
 
 \subsection{Related Works}
 
 Much work has been done with relation to image segmentation of multiple relevant objects (eg. buildings) and their classification.
 
 \begin{itemize}
-    \item On the topic of image recognition/classification, AlexNet, VGG, and Resnet are strong examples of fully supervised traditional CNN recognition and classification models. 
+    \item On the topic of image recognition/classification, AlexNet, VGG, and Resnet\cite{krizhevsky}\cite{simonyan}\cite{he} are strong examples of fully supervised traditional CNN recognition and classification models. 
     \item With respect to image segmentation, we end up using Grad-CAM/Score-CAM as detailed after this section.
 \end{itemize}
 
-This also includes significant work being done on visual explanations of CNN models via Selvaraju, et al.\ (2019) Grad-CAM and other related works. These can be used as an alternative method of segmentation and recognition. Below we discuss the main works of relevance to our work:
+This also includes significant work being done on visual explanations of CNN models via Selvaraju, et al.\cite{selvaraju} (2019) Grad-CAM and other related works. These can be used as an alternative method of segmentation and recognition. Below we discuss the main works of relevance to our work:
 
 We prioritized utilizing Semi-Supervised Methods of image recognition. For this, we used FixMatch and MeanTeach methods. 
+
+\begin{itemize}
+    \item FixMatch, Sohn, et al.\cite{sohn} (2020), is a semi-supervised learning method that generates “pseudo-labels” using model predictions on weakly augmented unlabeled data, retained only if it’s high confidence; then, train to predict that pseudo label with a strongly augmented version.
+
+    This is a strong method for semi-supervised learning with limited datasets, so will be one of our main driving methods of implementation.
+    \item MeanTeacher, Tarvainen, et al.\cite{tarvainen} (2017), is a semi-supervised learning method that uses a teacher model to provide a consistent target for the student model. The teacher model is an exponential moving average of the student model, and the student model is trained to match the teacher model’s predictions.
+
+    At each training step, introduce the same minibatch with random augmentation to separate them. Note that this requires noise in the model. 
+
+    This method can be used to improve the performance of the model, especially when the dataset is relatively small, as in ours
+\end{itemize}
 
 % Write: how gradcam can help find the location of the building in the image (to help find its not on the foreground images), point out how this isn't the case in prelim
 
 \begin{itemize} % IP: Gradcam, Scorecam, Gradcam++
-    \item \citet{selvaraju} Grad-CAM, Selvaraju, et al.\ (2019), uses the final gradient into the last convolution layer to produce a visual representation of strength in decision making. This is a visual indicator of model strength and is on paper highly useful for highlighting image classification confidence, but can also be used to help define segmentation. 
+    \item Grad-CAM, Selvaraju, et al.\cite{selvaraju} (2019), uses the final gradient into the last convolution layer to produce a visual representation of strength in decision making. This is a visual indicator of model strength and is on paper highly useful for highlighting image classification confidence, but can also be used to help define segmentation. 
     % https://arxiv.org/abs/1610.02391 gradcam
-    \item Grad-CAM++, Chattopadhay, et al.\ (2018) is an upgrade to Grad-CAM by generalizing it. It can then isolate/identify multiple object instances in a single image (important for our proposal due to the presence of multiple buildings in images) and a generally improved visual indicator. 
+    \item Grad-CAM++, Chattopadhay, et al.\cite{chattopadhay} (2018) is an upgrade to Grad-CAM by generalizing it. It can then isolate/identify multiple object instances in a single image (important for our proposal due to the presence of multiple buildings in images) and a generally improved visual indicator. 
     % https://arxiv.org/abs/1710.11063 gradcam++
-    \item Score-CAM, Wang, et al.\ (2020) is an alternative approach to Grad-CAM that completely discards using the gradient and instead evaluates the weight of each activation map in the forward pass. 
+    \item Score-CAM, Wang, et al.\cite{wang} (2020) is an alternative approach to Grad-CAM that completely discards using the gradient and instead evaluates the weight of each activation map in the forward pass. 
     % https://arxiv.org/abs/1910.01279 scorecam
 \end{itemize}
 
@@ -101,18 +109,33 @@ Grad-CAM++ and Score-CAM can both be used as an important means for highlighting
 
 Figure 2 (attached to the appendix) has examples utilizing Grad-CAM++ on architecture similar to ResNet.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.3\linewidth]{fig1.png}
-    \caption{Preliminary Grad-CAM results}
+    \caption{Preliminary Grad-CAM results example}
     \label{fig:prelim_results_1}
 \end{figure}
 
-\subsection{Motivation for Proposed Methods}
+We additionally used GNN methods and HITL methods. \begin{itemize}
+    \item Graph Neural Networks are a method of using graph data to make predictions. This can be used to make predictions on the labeled/unlabeled samples as nodes, and should this perform reasonably this can be used as a primary paradigm as well. 
+    
+    The main motivator for this is that nodes can be connected by edges to represent relationships that go beyond stride.
+
+    Long et al.\cite{long} (2020) is prior work on GNN image recognition, done on the MNIST dataset on low resolution black and white images. Our intention is to innovate by extending this to high resolution color images of buildings.
+
+    \item Superpixels are a method of dividing an image into regions of similar color. This can be used to help segment the image and can be used to help the model focus on the building itself. This is a method of image segmentation that can be used to help the model focus on the building itself. For graphs, this is a method of reducing the complexity greatly. 
+
+    The SLIC-Superpixel transform, developed by EPFL labs \cite{epflSLICSuperpixels}, is a strong method of superpixel generation that can be used to help segment the image. This can be used to focus node complexity on details.
+    \item HITL is human corrections on the network to help the network focus on areas of interest by providing absolute feedback on whether or not Grad-CAM is focusing on the correct areas.
+\end{itemize}
+
+\subsection{Motivation for Methods}
 
 From these prior works we have the basic motivation of leveraging traditional CNN image segmentation and recognition techniques for the sake of identifying any buildings in the input images. Our main innovation is to attempt to use Grad-CAM++ or a similar technique to see if they can be used for image segmentation instead, and to attempt to apply this basic system to a variety of goals.
 
-\section{Proposed Approach}
+The focus is to see if we can get Grad-CAM to focus on the elements of the image that are important, to help "guide" the model to focus on the building itself. This is important because the model may be making predictions based on unrelated objects in the image, and this can be used to confirm model confidence.
+
+\section{Approach}
 \label{approach}
 
 \subsection{Data Collection}
@@ -174,27 +197,13 @@ We have a variety of higher level goals for our project beyond just the basic pl
     \label{fig:prelim_results_2}
 \end{figure}
 
-\section*{References}
-\label{cites}
-
 \medskip
 
 
-{
 \small
 
-% Cite format MLA 9 - Jeffery
-[1] Krizhevsky, Alex, et al. “ImageNet Classification with Deep Convolutional Neural Networks.” Communications of the ACM, vol. 60, no. 6, May 2012, pp. 84–90, proceedings.neurips.cc/paper\_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf.
-
-[2] Simonyan, Karen, and Andrew Zisserman. “Very Deep Convolutional Networks for Large-Scale Image Recognition.” ArXiv.org, 10 Apr. 2015, arxiv.org/abs/1409.1556.
-
-[3] He, Kaiming, et al. “Deep Residual Learning for Image Recognition.” ArXiv.org, arXiv, 10 Dec. 2015, arxiv.org/abs/1512.03385.
-
-[4] Selvaraju, Ramprasaath R., et al. “Grad-CAM: Visual Explanations from Deep Networks via Gradient-Based Localization.” International Journal of Computer Vision, vol. 128, no. 2, Feb. 2020, pp. 336–59, https://doi.org/10.1007/s11263-019-01228-7.
-
-[5] Chattopadhay, Aditya, et al. “Grad-CAM++: Generalized Gradient-Based Visual Explanations for Deep Convolutional Networks.” 2018 IEEE Winter Conference on Applications of Computer Vision (WACV), Mar. 2018, https://doi.org/10.1109/wacv.2018.00097.
-
-[6] Wang, Haofan, et al. “Score-CAM: Score-Weighted Visual Explanations for Convolutional Neural Networks.” ArXiv:1910.01279 [Cs], Apr. 2020, arxiv.org/abs/1910.01279.
+\bibliographystyle{abbrv}
+\bibliography{sources}
 
 % https://www.getbibtex.com
 
