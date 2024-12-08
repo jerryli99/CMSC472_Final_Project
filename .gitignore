@@ -173,3 +173,4 @@ result
 *.fls
 *.log 
 *.synctex.gz
+*.out

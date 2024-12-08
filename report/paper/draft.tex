@@ -78,16 +78,18 @@ The primary motivator for this project lies in the challenge of combined segment
 Much work has been done with relation to image segmentation of multiple relevant objects (eg. buildings) and their classification.
 
 \begin{itemize}
-    \item On the topic of image recognition/classification, AlexNet, VGG, and Resnet are strong examples of traditional CNN recognition and classification models. We intend to build on their techniques.
-    \item With respect to image segmentation, we may end up using Grad-CAM/Score-CAM as detailed after this section. However, we will compare with traditional segmentation techniques as detailed in class (proposals and culling, and we can implement something similar to U-Net)
+    \item On the topic of image recognition/classification, AlexNet, VGG, and Resnet are strong examples of fully supervised traditional CNN recognition and classification models. 
+    \item With respect to image segmentation, we end up using Grad-CAM/Score-CAM as detailed after this section.
 \end{itemize}
 
 This also includes significant work being done on visual explanations of CNN models via Selvaraju, et al.\ (2019) Grad-CAM and other related works. These can be used as an alternative method of segmentation and recognition. Below we discuss the main works of relevance to our work:
 
+We prioritized utilizing Semi-Supervised Methods of image recognition. For this, we used FixMatch and MeanTeach methods. 
+
 % Write: how gradcam can help find the location of the building in the image (to help find its not on the foreground images), point out how this isn't the case in prelim
 
 \begin{itemize} % IP: Gradcam, Scorecam, Gradcam++
-    \item Grad-CAM, Selvaraju, et al.\ (2019), uses the final gradient into the last convolution layer to produce a visual representation of strength in decision making. This is a visual indicator of model strength and is on paper highly useful for highlighting image classification confidence, but can also be used to help define segmentation. 
+    \item \citet{selvaraju} Grad-CAM, Selvaraju, et al.\ (2019), uses the final gradient into the last convolution layer to produce a visual representation of strength in decision making. This is a visual indicator of model strength and is on paper highly useful for highlighting image classification confidence, but can also be used to help define segmentation. 
     % https://arxiv.org/abs/1610.02391 gradcam
     \item Grad-CAM++, Chattopadhay, et al.\ (2018) is an upgrade to Grad-CAM by generalizing it. It can then isolate/identify multiple object instances in a single image (important for our proposal due to the presence of multiple buildings in images) and a generally improved visual indicator. 
     % https://arxiv.org/abs/1710.11063 gradcam++
@@ -193,5 +195,7 @@ We have a variety of higher level goals for our project beyond just the basic pl
 [5] Chattopadhay, Aditya, et al. “Grad-CAM++: Generalized Gradient-Based Visual Explanations for Deep Convolutional Networks.” 2018 IEEE Winter Conference on Applications of Computer Vision (WACV), Mar. 2018, https://doi.org/10.1109/wacv.2018.00097.
 
 [6] Wang, Haofan, et al. “Score-CAM: Score-Weighted Visual Explanations for Convolutional Neural Networks.” ArXiv:1910.01279 [Cs], Apr. 2020, arxiv.org/abs/1910.01279.
+
+% https://www.getbibtex.com
 
 \end{document}
