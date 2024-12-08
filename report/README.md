@@ -1,1 +1,1 @@
-This outputs folder will save .pth files and image output files.
+This outputs folder will save report files

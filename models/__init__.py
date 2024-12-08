@@ -12,6 +12,7 @@ Models = {
     "densenet121": get_densenet121,
     "densenet161": get_densenet161,
     "densenet201": get_densenet201,
+    "vit16_224": get_vit16_224,
     # "custom": get_custom_model,  # Add your custom model here
 }
 

@@ -2,7 +2,7 @@
 
 Progress log:
 
-This project is about classifying UMD buildings (20 buildings). So far, we have close to 4000 labeled images for this project.
+This project is about classifying UMD buildings (20 buildings). So far, we have around 5000 images for this project.
 
 
 Update: 10/24/2024 to 11/12/2024, taking images of UMD buildings, coding GradCam, obtaining results from training small amounts of data to determine the number of images needed. For example, used resnet18 to train on 5 classes (total of 400 images ish) and see what GradCam is showing use. 
@@ -39,3 +39,6 @@ Update: 12/3/2024, explored about GNN. Specifically, learned something about sup
 
 
 Update: 12/4/2024, quick update: currently running supervised stuff, used resnet18, 34, 50; vgg11, 16, 19; densenet121, 201; ViT16_224; and the best ones we have for classifying 20 different UMD buildings are resnet18,34 and densenet121,201 models with about 88% test acc. ViT16_224 does not seem to be a good idea with 42% test acc. 
+
+
+Update: 12/5/2024, uploaded all possible results and updated code. Lacking GradCam for FixMatch...added the human-in-loop code with GradCam. The little experiment in that human-in-loop notebook code is about classifying 9 classes with around 450 images. I did 10 epochs for using resnet18 from scratch to train, got ~30% test acc. Then I did the same 10 epochs and learning rate but with human-feedback-loop, asking user about the correctness of the class prediction and the gradcam focus area for 1 image in each epoch and got test acc 67%. The resulting GradCam for test images look promising as well. This will mark the end of coding for this project before the project deadline 12/9/2024. Before the deadline will be simply writing the report (probably 8 pages of text and a few more for showing results). That's it, our long journey from Oct to Dec with this project. Thoughts? I will say that the project itself is flawed, but I did learn and explored a lot of classification related technuiques. Fair well.
