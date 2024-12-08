@@ -125,7 +125,7 @@ We additionally used GNN methods and HITL methods. \begin{itemize}
 
     \item Superpixels are a method of dividing an image into regions of similar color. This can be used to help segment the image and can be used to help the model focus on the building itself. This is a method of image segmentation that can be used to help the model focus on the building itself. For graphs, this is a method of reducing the complexity greatly. 
 
-    The SLIC-Superpixel transform, developed by EPFL labs \cite{epflSLICSuperpixels}, is a strong method of superpixel generation that can be used to help segment the image. This can be used to focus node complexity on details.
+    The SLIC-Superpixel transform, developed by EPFL labs \cite{epflSLICSuperpixels}, is a method of superpixel generation that can be used to help segment the image. This can be used to focus node complexity on details.
     \item HITL is human corrections on the network to help the network focus on areas of interest by providing absolute feedback on whether or not Grad-CAM is focusing on the correct areas.
 \end{itemize}
 
@@ -135,55 +135,67 @@ From these prior works we have the basic motivation of leveraging traditional CN
 
 The focus is to see if we can get Grad-CAM to focus on the elements of the image that are important, to help "guide" the model to focus on the building itself. This is important because the model may be making predictions based on unrelated objects in the image, and this can be used to confirm model confidence.
 
-\section{Approach}
-\label{approach}
+\section{Methods}
+\label{method}
 
 \subsection{Data Collection}
 
-All data will be collected by group members individually. We plan to select a set of UMD buildings (at least 10-15) for the classification. Each building will have at least 50 images taken using our phones from different angles, distances, and lighting (eg. time of day). We plan to do data augmentation for the buildings. 
+Data was collected by individually taking pictures and labeling them, along with data augmentation. We took around 4000 photos of UMD buildings over 20 classes, aiming for a 60/40 split of daytime/nighttime photos.
 
-Preprocessing will be done to normalize/resize images to a standard, strip metadata, and we will also consider color segmenting the building out of the image (eg. filtering out possible noise from the sky/foreground, although this will have the detriment of making it less robust). We also consider using alternative encodings; HSV may help given the UMD red-brown brick style
+Care was taken to ensure that the photos were taken from a variety of angles and distances. We were limited in time and season since data collection occurred mainly over the course of 2 weeks in fall. 
 
-Should the dataset be large, it can be proposed to train multiple models and utilize model averaging/ensemble voting to merge.
+The dataset was split 80/10/10 for training/validation/testing. Photos were augmented by displacement and inherently varied by rotation. All images were resized to 224x224 for training. 
 
-\subsection{Paradigm}
+Test images were further augmented by adding noise and other transforms, including the SyRA synthesized rain (Choi et al. \cite{choi}) method to add rain streaks to the images. 
 
-We intend to use a CNN architecture, loosely based around existing methods, in a semi-supervised format. We can use MeanTeacher or FixMatch for the method of semi-supervised learning.
+\subsection{Fully Supervised Baseline}
 
-It's also possible to use a graph based method and a GNN. It would be interesting to attempt this by using labeled/unlabled samples as nodes, and should this perform reasonably this can be used as a primary paradigm as well.
+A fully supervised model was implemented using various ResNet/VGG models for the sake of both comparison and as a baseline for our semi-supervised methods. After training ResNet18 was determined to be best with a 97\% accuracy on test set after %%TODO: fill in
 
-Training can be done on Google Colab, but we also have the option of using a training server (SAIL @ Columbia)
+\subsection{Semi-Supervised Methods}
 
-\section{Expected Plan}
-\label{plan}
+\subsubsection{Grad-CAM/Score-CAM}
 
-\subsection{Timeline}
+\subsubsection{Fixmatch}
 
-\begin{enumerate}
-    \item Nov 1 - We intend to have the dataset ready. At the time of writing we have \verb|~|1k photos before augmentation and processing.
-    \item Mid Nov - We want to ensure we have image classification trained correctly on building recognition for simple cases (single buildings with noise and on various conditions). 
-    \item End Nov - Hyper parameter tuning/Grad-CAM++/Score-CAM visualizations to improve the performance of the CNN architecture. Ensure via Grad-CAM that the model is confident and attempt preliminary segmentation on multiple instances and find confidence.
-    \item December - Utilize alternative segmentation methods (Grad-CAM/Score-CAM lineage) and alternative architecture (GNNs) and compare with our results.
-\end{enumerate}
+\subsubsection{MeanTeacher}
 
-Note - preliminary results indicate that Score-CAM may be too slow to be ideal on our set.
+\subsection{GNNs/HITL/VQA Experiments}
 
-% chronological plans
+% results for these will go into appendix
 
-\subsection{Moonshot Goals}
+\subsubsection{GNNs}
 
-% Show a 3D version of the UMD building given by a 2D image as input.
-% Take all images of all UMD buildings, including the building interiors, for classification.
-% Based on our database of images, generate an image that represents UMD building styles using diffusion models.
-% video?\
+\subsubsection{HITL}
 
-We have a variety of higher level goals for our project beyond just the basic plan. \begin{itemize}
-    \item First, should our model performance be tuned to be sufficiently fast, we would like to be able to apply it to videos. Sampling a video at 5-10 fps and passing it through the video is a simple way to accomplish this given enough performance.
-    \item Being able to classify all buildings on UMD (there are a lot of them) rather than just those in the central dataset. 
-    \item Being able to identify architectural styles beyond just building names. If the model is sufficiently confident we could even write a model to generate representative images of UMD architecture using a diffusion model (a long shot because it requires massive architecture changes)
-    \item Reconstruct a 3-D model of the building using a 2-D model as input (eg. not just classification but an understanding of what the building actually looks like - this is a long shot because it would likely require a lot of data and huge paradigm changes)
-    \item Interior identification of buildings (much harder due to a potential lack of distinguishing features)
-\end{itemize}
+\subsubsection{VQA}
+
+\section{Results}
+\label{result}
+
+\subsection{Code}
+
+Code for models, data collection and augmentation, along with the SLIC methods and HITL methods, were written and implemented in pytorch and can be found on our Github repository: \url{https://github.com/BlueTurtle123/CMSC472_Final_Project}
+
+\subsection{Fully Supervised Baseline}
+
+% Demonstrate stats
+
+\subsection{Semi-Supervised Methods}
+
+% Demonstrate stats
+
+\subsection{Other Experiments}
+
+\subsubsection{HITL}
+
+\subsubsection{GNN SLIC Transform}
+
+% quick overview of new transform and then note results in appendix
+
+\subsubsection{VQA}
+
+% quick overview of VQA and then note results in appendix
 
 \newpage 
 \appendix

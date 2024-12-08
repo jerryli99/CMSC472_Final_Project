@@ -5,6 +5,11 @@ A.~Chattopadhay, A.~Sarkar, P.~Howlader, and V.~N. Balasubramanian.
 \newblock Grad-cam++: Generalized gradient-based visual explanations for deep convolutional networks.
 \newblock In {\em 2018 IEEE Winter Conference on Applications of Computer Vision (WACV)}, pages 839--847, 2018.
 
+\bibitem{choi}
+J.~Choi, D.~H. Kim, S.~Lee, S.~H. Lee, and B.~C. Song.
+\newblock Synthesized rain images for deraining algorithms.
+\newblock {\em Neurocomputing}, 492:421--439, 2022.
+
 \bibitem{epflSLICSuperpixels}
 EPFL.
 \newblock {S}{L}{I}{C} {S}uperpixels --- epfl.ch.
