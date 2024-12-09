@@ -151,7 +151,9 @@ We additionally used GNN methods and HITL methods. \begin{itemize}
 
 \subsection{Motivation for Methods}
 
-From these prior works we have the basic motivation of leveraging traditional CNN image segmentation and recognition techniques for the sake of identifying any buildings in the input images. Our main innovation is to attempt to use Grad-CAM++ or a similar technique to see if they can be used for image segmentation instead, and to attempt to apply this basic system to a variety of goals.
+From these prior works we have the basic motivation of leveraging traditional CNN image recognition techniques for the sake of identifying any buildings in the input images. Our main innovation is to attempt to use Grad-CAM++ or a similar technique to see if they can be used for helping improve recognition instead, and to attempt to apply this basic system to a variety of goals.
+
+We use Grad-CAM because we need a way to visualize the convolutional layers to help guide a semi-supervised model. If we look at the Fully Connected (FC) layers, the feature maps get flattened into a 1-D vector, which loses the spatial information inherent in the earlier convolutional layers, so it is not the place we should be looking for. Grad-CAM is thus a method of visualizing the convolutional layers, and can be used to help guide the model to focus on the building itself.
 
 The focus is to see if we can get Grad-CAM to focus on the elements of the image that are important, to help "guide" the model to focus on the building itself. This is important because the model may be making predictions based on unrelated objects in the image, and this can be used to confirm model confidence.
 
@@ -345,7 +347,7 @@ However, we were successful in locking Grad-CAM onto building features, and we a
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{fixmatch.png}
+    \includegraphics[width=0.6\linewidth]{fixmatch.png}
     \caption{FixMatch Model Grad-CAM visualization}
     \label{fig:fixmatch_results}
 \end{figure}
@@ -360,7 +362,7 @@ However, it still suffered from the same lack of diversity. Once again, we were 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[trim={0 38cm 0 12.5cm},clip,width=0.6\linewidth]{meanteacher.png}
+    \includegraphics[trim={0 38cm 0 12.7cm},clip,width=0.6\linewidth]{meanteacher.png}
     \caption{MeanTeacher Model Grad-CAM visualization}
     \label{fig:meanteacher_results}
 \end{figure}
@@ -389,6 +391,10 @@ We would also like to continue our novel work on GNNs for large images in color.
 \subsection*{GitHub Repository}
 
 All code and resources for this project are available at: \url{https://github.com/BlueTurtle123/CMSC472_Final_Project}, and the image data is available upon request to \verb*|jtian12@umd.edu|
+
+\subsection*{Presentation}
+
+A presentation of this project is available at: \url{https://docs.google.com/presentation/d/1SDHgrbd2Suk2Qw0XBbqwSBKSYyZ87k4XBCzELvPUu8c/edit?usp=sharing}
 
 \newpage 
 \appendix
@@ -424,8 +430,6 @@ The GNN model was unable to complete training due to time constraints. However, 
     \caption{SLIC transform of Iribe building picture}
     \label{fig:slic2}
 \end{figure}
-
-Note how in the pictures, excessive complexity is granted to largely irrelevant details, such as the clouds and sky. Minute differences in the image data due to noise result in a lack of clustering in those areas. 
 
 \section{Extra Figures}
 \label{extra_figures}
