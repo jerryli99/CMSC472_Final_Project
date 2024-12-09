@@ -200,7 +200,7 @@ Guided Backpropagation is a variant of the backpropagation algorithm where negat
 
 Our FixMatch model generated pseudo-labels for unlabeled data using weakly augmented data (eg. rotation, translation, etc.) and trained to predict these pseudo-labels with strongly augmented data (eg. cutout, solarization, color space, etc.).
 
-We trained a variety of different models with different hyperparameters and selected 5 for further testing. Parameters can be found on the github in \verb*|dataset/parms.ipynb|. All images were standardized at 224x224, using the SyRA synthesized rain test image set with a random augmentation pipeline. 
+We trained a variety of different models with different hyperparameters (batch size, momentum, warm up epochs, pseudo label threshold, etc) and selected 5 for further testing. Parameters can be found on the github in \verb*|dataset/parms.ipynb|. All images were standardized at 224x224, using the SyRA synthesized rain test image set with a random augmentation pipeline. 
 
 All models were trained for 128 epochs over the WideResNet18 model with depth 16, widen factor 2, and dropout 1. Other architectures (within the ResNet family and VGG families) were tried as well. The model was trained on the 20 classes of UMD buildings, on Google Colab with a Tesla T4 GPU. All code is available on the github repository.
 
@@ -231,7 +231,9 @@ VQA was found to be infeasible due to time constraints; the amount of questions 
 
 HITL, or Human In The Loop, is a method to accelerate the training of a model by providing human feedback on the model's predictions. This can be used to help the model focus on areas of interest by providing absolute feedback on whether or not Grad-CAM is focusing on the correct areas.
 
-We implemented a model on 9 classes and a train set of 450 images, where humans were asked to provide feedback on the accuracy of class predictions and whether or not the Grad-CAM feedback was accurate (eg. not focusing on noise). The model was implemented for PyTorch and was trained on Colab with a Tesla T4 GPU for 10 epochs, with human interference once per epoch.
+We implemented a model on 9 classes and a train set of 450 images, where humans were asked to provide feedback on the accuracy of class predictions and whether or not the Grad-CAM feedback was accurate (eg. not focusing on noise). The model was implemented for PyTorch and was trained on Colab with a Tesla T4 GPU for 10 epochs, with human interference once per epoch. 
+
+After each epoch, the human was asked to confirm or deny the accuracy of the model's prediction, and asked a region of the image for the model to focus on more based on the Grad-CAM feedback.
 
 A ResNet18 model was used, with 10 epochs, $lr=0.001$, batch size 64. 
 
@@ -353,7 +355,7 @@ However, it still suffered from the same lack of diversity. Once again, we were 
 
 Our key findings are that for the classification of buildings, ResNet18 is the best baseline model; and that MeanTeacher outperformed FixMatch considerably, achieving a top1 student accuracy of 75.08\% and top1 teacher accuracy of 73.89\%. Extensive quantitative findings prove that it's also much more robust to overfitting than FixMatch, and reacts better to an augmented test set. For both, we were successful in locking Grad-CAM onto building features. 
 
-However, both models suffered from a lack of diversity in the dataset, which led to overfitting on nonexistent features and a lack of improvement. This was exacerbated by the limited weather conditions and time of day we took photos, which resulted in a lack of diversity and strong overfitting on nonexistent features. Additionally, weather augmentation was not as diverse as might be necessary to prove robustness to real world conditions.
+However, both models suffered from a lack of diversity in the dataset, which led to overfitting on nonexistent features and a lack of improvement. Advancement on FixMatch can be achieved via cleaning up the dataset (eg less noise). Additionally, multiple classes can be defined for various parts of buildings (i.e. Atlantic Building looks very different depending on the angle)
 
 Future research will focus on increasing the diversity of the dataset, along with continuing preliminary work on GNNs. 
 
