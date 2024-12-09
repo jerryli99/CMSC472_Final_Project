@@ -88,7 +88,7 @@
 %% 
 
 \begin{abstract}
-    With the rise of new computational architectures for image processing and classification, computer vision systems are highly diverse, raising the question of which approach is the most effective for a given task. Our study focuses on designing and evaluating a reliable classification system for identifying buildings on the University of Maryland campus using semi-supervised CNN. By constructing a custom image database from scratch and experimenting with various architectures for semi-supervised learning, we aim to identify the best model for our classification problem. Additionally, we utilize CNN visualization eg. Grad-CAM to further assess our model’s performance.
+    With the rise of new computational architectures for image processing and classification, computer vision systems are highly diverse, raising the question of which approach is the most effective for a given task. Our study focuses on designing and evaluating a classification system for identifying buildings on the University of Maryland campus using convolutional neural networks. By experimenting with various architectures from both supervised and semi-supervised learning, we found that the ResNet-18 architecture works the best in our use case. We also tested using Human-in-Loop Learning with Grad-CAM to get a more accurate depiction of which parts of the images are most important for classification.
 \end{abstract}
 
 
@@ -98,6 +98,10 @@
 Although not addressing an urgent problem, our goal was to gain experience with the entire deep learning lifecycle, from data acquisition to final model evaluation. We built our own image database from scratch and conducted extensive experiments with a variety of supervised and semi-supervised learning models to ensure the highest accuracy.
 
 The challenge came from the fact that we had to build our own dataset from scratch. We additionally worked with implementation of high resolution images on limited datasets to semi-supervised methods, along with the use of Grad-CAM for image segmentation.
+
+Semi-supervised learning is often chosen over supervised learning when labeled data is limited and costly, while unlabeled data is more readily available and cheaper. Semi-supervised learning can enhance model performance and generalization by leveraging both labeled and unlabeled data. This approach is particularly advantageous in real-world scenarios where gathering extensive labeled datasets is impractical.
+
+Labeling every image in an extremely large dataset is unrealistic in a real-world scenario. So, labeling a small portion of the dataset and creating pseudo-labels of the unlabeled training set is more efficient.
 
 We additionally did experiments on GNNs and HITL with Grad-CAM.
 
@@ -370,11 +374,21 @@ However, both models suffered from a lack of diversity in the dataset, which led
 
 For our dataset, after trying various network architectures, we learned that having deep layers won’t simply improve the prediction accuracy (and can easily result in overfitting). In the ResNet family, for example, ResNet50 performed less accurately compared to ResNet18. Another interesting result we got is that in the VGG family, the test data showed us that VGG16 > VGG11 > VGG19 accuracy-wise. Thus, networks with not enough layers can also cause a difference.  
 
-Future research will focus on increasing the diversity of the dataset, along with continuing preliminary work on GNNs. We would also like to experiment with more fine tuning of parameters and warm up functions.
+\subsection*{Future Work}
+
+In the short term, research would primarily focus on increasing the diversity of the dataset. It would be ideal to have, additionally, a much cleaner dataset for the FixMatch model, and to have more classes defined for the buildings.
+
+We would also like to experiment with more fine tuning of parameters and warm up functions.
+
+The primary long term goals of the project would be optimizing the MeanTeacher model to achieve higher accuracy, and to experiment with more advanced methods of semi-supervised learning. Although we believe that one method of achieving this is via diversity on the dataset, another method is to use more powerful computing resources given the low amount of epochs we were able to achieve given our technical constraints.
+
+An interesting advanced method of semi-supervised learning would be to utilize Grad-CAM as a primary method of segmentation, which would be a major innovation in the field; additionally, utilizing Grad-CAM as a secondary target (where a fully labeled result might use a fully masked image as GT) could result in much stronger semi-supervised results.
+
+We would also like to continue our novel work on GNNs for large images in color. No significant results in the scientific community have passed with regards to GNN image recognition on high resolution color images, and we believe that this could be a significant area of research.
 
 \subsection*{GitHub Repository}
 
-All code and resources for this project are available at: \url{https://github.com/BlueTurtle123/CMSC472_Final_Project}
+All code and resources for this project are available at: \url{https://github.com/BlueTurtle123/CMSC472_Final_Project}, and the image data is available upon request to \verb*|jtian12@umd.edu|
 
 \newpage 
 \appendix
