@@ -205,6 +205,7 @@ Guided Backpropagation is a variant of the backpropagation algorithm where negat
     \label{fig:gradcam_demo}
 \end{figure}
 %% TODO: insert figure.
+Grad-CAM++ works by assigning importance weights to individual pixels in the feature maps, rather than the global pooled gradients used in Grad-CAM, allowing it to better capture fine-grained details and spatial information. This pixel-level weighting enables Grad-CAM++ to provide more localized and precise visual explanations, especially in cases where multiple instances of the same class are present in an image. Despite this theoretical improvement, the results we obtained did not show significant differences compared to Grad-CAM, potentially due to limitations in model architecture, dataset complexity, or specific implementation nuances.
 
 \subsubsection{FixMatch}
 
@@ -212,7 +213,7 @@ Our FixMatch model generated pseudo-labels for unlabeled data using weakly augme
 
 We trained a variety of different models with different hyperparameters (batch size, momentum, warm up epochs, pseudo label threshold, etc) and selected 5 for further testing. Parameters can be found on the github in \verb*|CMSC472_Final_Project/code/my_fixmatch/dataset/parms.ipynb|. All images were standardized at 224x224, using the SyRA synthesized rain test image set with a random augmentation pipeline. 
 
-Models 1, 2, 3 were trained for 128 epochs, and 4, 5 for 32 over the WideResNet model with depth 16, widen factor 2, and dropout 1. Each model was trained on the previous, iteratively. The model was trained on the 20 classes of UMD buildings, on a NVIDIA RTX 3090. All code is available on the Github repository.
+Models 1, 2 were trained for 128 epochs, and 3, 4, 5 for 32 over the WideResNet model with depth 16, widen factor 2, and dropout 1. Each model was trained on the previous, iteratively. The model was trained on the 20 classes of UMD buildings, on a NVIDIA RTX 3090. All code is available on the Github repository.
 
 \subsubsection{MeanTeacher}
 
@@ -365,7 +366,9 @@ However, it still suffered from the same lack of diversity. Once again, we were 
 
 Our key findings are that for the classification of buildings, ResNet18 is the best baseline model; and that MeanTeacher outperformed FixMatch considerably, achieving a top1 student accuracy of 75.08\% and top1 teacher accuracy of 73.89\%. Extensive quantitative findings prove that it's also much more robust to overfitting than FixMatch, and reacts better to an augmented test set. For both, we were successful in locking Grad-CAM onto building features. 
 
-However, both models suffered from a lack of diversity in the dataset, which led to overfitting on nonexistent features and a lack of improvement. Advancement on FixMatch can be achieved via cleaning up the dataset (eg less noise). Additionally, multiple classes can be defined for various parts of buildings (i.e. Atlantic Building looks very different depending on the angle)
+However, both models suffered from a lack of diversity in the dataset, which led to overfitting on nonexistent features and a lack of improvement. Advancement on FixMatch can be achieved via cleaning up the dataset (eg less noise). Additionally, multiple classes can be defined for various parts of buildings (i.e. Atlantic Building looks very different depending on the angle).
+
+For our dataset, after trying various network architectures, we learned that having deep layers won’t simply improve the prediction accuracy (and can easily result in overfitting). In the ResNet family, for example, ResNet50 performed less accurately compared to ResNet18. Another interesting result we got is that in the VGG family, the test data showed us that VGG16 > VGG11 > VGG19 accuracy-wise. Thus, networks with not enough layers can also cause a difference.  
 
 Future research will focus on increasing the diversity of the dataset, along with continuing preliminary work on GNNs. We would also like to experiment with more fine tuning of parameters and warm up functions.
 
