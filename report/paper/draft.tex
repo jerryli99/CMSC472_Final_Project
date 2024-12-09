@@ -214,9 +214,9 @@ For labeled data, the student network is trained to minimize supervised loss via
 
 All data went to both of our models, where it was then augmented with random horizontal translations and translations (eg. weak augmentation). We utilized MSE loss for consistency loss in unlabeled data. For labeled data, we utilized the weights formula \begin{align*}
     \theta_{\text{teacher}}=\alpha \cdot\theta_{\text{teacher}}+(1-\alpha)\cdot\theta_{\text{student}}
-\end{align*} where $\alpha=0.97$ is the decay rate. Final loss was calculated as \begin{align*}
+\end{align*} where $\alpha$ is the decay rate. Final loss was calculated as \begin{align*}
     \mathcal{L}_{\text{total}}=\mathcal{L}_{\text{supervised}}+\lambda\cdot\mathcal{L}_{\text{consistency}}
-\end{align*}where $\lambda=1.75$ was the weight of the consistency loss.
+\end{align*}where $\lambda$ was the weight of the consistency loss.
 
 The model was trained for 25 epochs over the WideResNet18 model. The model was trained on the 20 classes of UMD buildings, on Google Colab with a Tesla T4 GPU. All code is available on the github repository.
 
