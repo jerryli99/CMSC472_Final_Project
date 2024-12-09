@@ -42,3 +42,5 @@ Update: 12/4/2024, quick update: currently running supervised stuff, used resnet
 
 
 Update: 12/5/2024, uploaded all possible results and updated code. Lacking GradCam for FixMatch...added the human-in-loop code with GradCam. The little experiment in that human-in-loop notebook code is about classifying 9 classes with around 450 images. I did 10 epochs for using resnet18 from scratch to train, got ~30% test acc. Then I did the same 10 epochs and learning rate but with human-feedback-loop, asking user about the correctness of the class prediction and the gradcam focus area for 1 image in each epoch and got test acc 67%. The resulting GradCam for test images look promising as well. This will mark the end of coding for this project before the project deadline 12/9/2024. Before the deadline will be simply writing the report (probably 8 pages of text and a few more for showing results). That's it, our long journey from Oct to Dec with this project. Thoughts? I will say that the project itself is flawed, but I did learn and explored a lot of classification related technuiques. Fair well.
+
+Update: 12/8/2024, added Guided Grad-CAM, cool stuff.
