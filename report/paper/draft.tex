@@ -30,17 +30,37 @@
 \usepackage{graphicx}       % graphics (added by Jeffery)
 \usepackage{float}          % float (added by Jeffery)
 
+\usepackage{graphicx} % Required for inserting images
+\usepackage{tikz}
+\usepackage{soul}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{parskip}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage[shortlabels]{enumitem}
+
+\newcommand*{\Perm}[2]{{}^{#1}\!P_{#2}}%
+\newcommand*{\Comb}[2]{{}^{#1}C_{#2}}%
+\newcommand*{\qed}{\hfill$\square$}%
+\newcommand*{\txt}[1]{\text{ #1 }}%
+\newcommand*{\iprod}[1]{\langle #1 \rangle}
+\newcommand*{\fora}{\txt{}\forall}%
+\newcommand*{\rr}{\mathbb{R}}%
+
 \title{ UMD Building Classification }
 
 \author{%
+  Jerry Li\\
+  \texttt{jli103@umd.edu} \\
+  \And 
   Can Li \\
   \texttt{c5405@umd.edu} \\
   \And 
   Jeffery Tian \\
   \texttt{jtian12@umd.edu} \\
-  \And 
-  Jerry Li\\
-  \texttt{jli103@umd.edu} \\
   \And 
   Christopher Lim \\
   \texttt{clim0326@umd.edu} \\
@@ -56,8 +76,17 @@
 \maketitle
 
 
+%% TODO: 
+%% Can's notes on data collection, FixMatch
+%% https://arxiv.org/pdf/1412.6856
+%% http://cnnlocalization.csail.mit.edu/Zhou_Learning_Deep_Features_CVPR_2016_paper.pdf
+%% https://arxiv.org/pdf/1610.02391
+%% https://github.com/kekmodel/FixMatch-pytorch
+%% https://link.springer.com/article/10.1007/s10462-022-10246-w
+%% 
+
 \begin{abstract}
-  We propose that, given an input image of a UMD building, we can classify the building with the correct name in close to realtime using CNN image segmentation and classification methods. What makes this project valuable for educational purposes is that we will explore how to build our image database from scratch, experiment with different convolution neural networks, different ways to visualize the CNN layers for debugging our network design and potentially even for segmentation, and utilizing semi-supervised learning.
+    With the rise of new computational architectures for image processing and classification, computer vision systems are highly diverse, raising the question of which approach is the most effective for a given task. Our study focuses on designing and evaluating a reliable classification system for identifying buildings on the University of Maryland campus using semi-supervised CNN. By constructing a custom image database from scratch and experimenting with various architectures for semi-supervised learning, we aim to identify the best model for our classification problem. Additionally, we utilize CNN visualization eg. Grad-CAM to further assess our model’s performance.
 \end{abstract}
 
 
@@ -66,7 +95,7 @@
 
 Although not addressing an urgent problem, our goal was to gain experience with the entire deep learning lifecycle, from data acquisition to final model evaluation. We built our own image database from scratch and conducted extensive experiments with a variety of supervised and semi-supervised learning models to ensure the highest accuracy.
 
-The challenge came from the fact that we had to build our own dataset from scratch. We additionally worked with implementation of high resolution images on limited datasets to semi-supervised methods, along with the use of Grad-CAM and Score-CAM for image segmentation.
+The challenge came from the fact that we had to build our own dataset from scratch. We additionally worked with implementation of high resolution images on limited datasets to semi-supervised methods, along with the use of Grad-CAM for image segmentation.
 
 We additionally did experiments on GNNs and HITL with Grad-CAM.
 
@@ -76,7 +105,7 @@ Much work has been done with relation to image segmentation of multiple relevant
 
 \begin{itemize}
     \item On the topic of image recognition/classification, AlexNet, VGG, and Resnet\cite{krizhevsky}\cite{simonyan}\cite{he} are strong examples of fully supervised traditional CNN recognition and classification models. 
-    \item With respect to image segmentation, we end up using Grad-CAM/Score-CAM as detailed after this section.
+    \item With respect to image segmentation, we end up using Grad-CAM as detailed after this section.
 \end{itemize}
 
 This also includes significant work being done on visual explanations of CNN models via Selvaraju, et al.\cite{selvaraju} (2019) Grad-CAM and other related works. These can be used as an alternative method of segmentation and recognition. Below we discuss the main works of relevance to our work:
@@ -88,10 +117,6 @@ We prioritized utilizing Semi-Supervised Methods of image recognition. For this,
 
     This is a strong method for semi-supervised learning with limited datasets, so will be one of our main driving methods of implementation.
     \item MeanTeacher, Tarvainen, et al.\cite{tarvainen} (2017), is a semi-supervised learning method that uses a teacher model to provide a consistent target for the student model. The teacher model is an exponential moving average of the student model, and the student model is trained to match the teacher model’s predictions.
-
-    At each training step, introduce the same minibatch with random augmentation to separate them. Note that this requires noise in the model. 
-
-    This method can be used to improve the performance of the model, especially when the dataset is relatively small, as in ours
 \end{itemize}
 
 % Write: how gradcam can help find the location of the building in the image (to help find its not on the foreground images), point out how this isn't the case in prelim
@@ -101,20 +126,9 @@ We prioritized utilizing Semi-Supervised Methods of image recognition. For this,
     % https://arxiv.org/abs/1610.02391 gradcam
     \item Grad-CAM++, Chattopadhay, et al.\cite{chattopadhay} (2018) is an upgrade to Grad-CAM by generalizing it. It can then isolate/identify multiple object instances in a single image (important for our proposal due to the presence of multiple buildings in images) and a generally improved visual indicator. 
     % https://arxiv.org/abs/1710.11063 gradcam++
-    \item Score-CAM, Wang, et al.\cite{wang} (2020) is an alternative approach to Grad-CAM that completely discards using the gradient and instead evaluates the weight of each activation map in the forward pass. 
-    % https://arxiv.org/abs/1910.01279 scorecam
 \end{itemize}
 
-Grad-CAM++ and Score-CAM can both be used as an important means for highlighting image classification confidence, both of which we intend to use as the most advanced methods in their respective lineages. As an example, see our preliminary original Grad-CAM results in Figure 1 on instances on our test set, where Grad-CAM indicates it's making predictions based on unrelated objects (foreground foliage, people, unrelated elements of the building). This can be used for confirmation of model confidence. If the model is sufficiently confident, this can even be used as a means to indicate building locations (especially given Grad-CAM++ ability to find multiple instances) within the image rather than using traditional segmentation techniques.
-
-Figure 2 (attached to the appendix) has examples utilizing Grad-CAM++ on architecture similar to ResNet.
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.3\linewidth]{fig1.png}
-    \caption{Preliminary Grad-CAM results example}
-    \label{fig:prelim_results_1}
-\end{figure}
+Grad-CAM++ can be used as an important means for highlighting image classification confidence, both of which we intend to use as the most advanced methods in their respective lineages. As an example, see our preliminary original Grad-CAM results in Figure 1 on instances on our test set, where Grad-CAM indicates it's making predictions based on unrelated objects (foreground foliage, people, unrelated elements of the building). This can be used for confirmation of model confidence. If the model is sufficiently confident, this can even be used as a means to indicate building locations (especially given Grad-CAM++ ability to find multiple instances) within the image rather than using traditional segmentation techniques.
 
 We additionally used GNN methods and HITL methods. \begin{itemize}
     \item Graph Neural Networks are a method of using graph data to make predictions. This can be used to make predictions on the labeled/unlabeled samples as nodes, and should this perform reasonably this can be used as a primary paradigm as well. 
@@ -144,70 +158,249 @@ Data was collected by individually taking pictures and labeling them, along with
 
 Care was taken to ensure that the photos were taken from a variety of angles and distances. We were limited in time and season since data collection occurred mainly over the course of 2 weeks in fall. 
 
+%% TODO: insert figure.
+
 The dataset was split 80/10/10 for training/validation/testing. Photos were augmented by displacement and inherently varied by rotation. All images were resized to 224x224 for training. 
 
 Test images were further augmented by adding noise and other transforms, including the SyRA synthesized rain (Choi et al. \cite{choi}) method to add rain streaks to the images. 
 
+Further augmentation methods were done for training via contrast, brightness, colorspace, cutout, rotation, sharpness, shearx, inversion, solarization, and translation methods. For FixMatch, we followed a standard augmentation pipeline of the above; details can be seen in our github.
+
 \subsection{Fully Supervised Baseline}
 
-A fully supervised model was implemented using various ResNet/VGG models for the sake of both comparison and as a baseline for our semi-supervised methods. After training ResNet18 was determined to be best with a 97\% accuracy on test set after %%TODO: fill in
+A fully supervised model was implemented using various ResNet/VGG models for the sake of both comparison and as a baseline for our semi-supervised methods. After training ResNet18 was determined to be best with a 97.63\% validation accuracy on test set after only 12 epochs. 
+
+We achieved this using the pretrained ResNet18 model and fine-tuning it over our dataset. Code and parameters can be found in the github repository. The primary function of the FS model was to provide a baseline for our semi-supervised methods.
 
 \subsection{Semi-Supervised Methods}
 
-\subsubsection{Grad-CAM/Score-CAM}
+We utilized 2 methods of semi-supervised learning: FixMatch and MeanTeacher. Both were supplemented by Grad-CAM
 
-\subsubsection{Fixmatch}
+\subsubsection{Grad-CAM}
+
+Grad-CAM visualizes the last layer of the CNN structure with heatmaps, and is a generalization of the CAM method. In the Grad-CAM process, a forward pass is done to compute the class score for target class $c$. Then, gradients are backpropagated on the target class score $y^c$ (before softmax), wrt. the feature maps of each convolutional layer, $A^k$. That is, $\forall k \in \{1, 2, ..., K\}$, we compute the gradient of $\frac{\partial y^c}{A^k}$. Then, the importance of the weight $a_k^c\in A^k$ is computed as \begin{align*}
+    a_k^c=\frac{1}{Z}\sum_i\sum_j\frac{\partial y^c}{A_{ij}^k}
+\end{align*} where $Z$ is the total number of spacial locations in the feature map. Then, the final feature map is calculated as \begin{align*}
+    \mathcal{L}_{Grad-CAM}^c=\text{ReLU}\left(\sum_k a_k^cA^k\right)
+\end{align*}
+
+While Grad-CAM can show us the heatmap, the Grad-CAM paper by Selvaraju et al. \cite{selvaraju} notes that it lacks the ability to show us the fine grained details like pixel-space gradient visualization, such as Guided Backpropagation. 
+
+Guided Backpropagation is a variant of the backpropagation algorithm where negative gradients are suppressed during the backward pass. Only positive gradients are propagated, highlighting the pixels in the input image that strongly activate certain neurons in the network. This will result in a high-resolution saliency map of the input image. To combine it with Grad-CAM, we can multiply the Grad-CAM heatmap with the Guided Backpropagation saliency map element-wise to get the Guided Grad-CAM result.  
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{gradcam_demo.png}
+    \caption{Grad-CAM visualization demo}
+    \label{fig:gradcam_demo}
+\end{figure}
+%% TODO: insert figure.
+
+\subsubsection{FixMatch}
+
+Our FixMatch model generated pseudo-labels for unlabeled data using weakly augmented data (eg. rotation, translation, etc.) and trained to predict these pseudo-labels with strongly augmented data (eg. cutout, solarization, color space, etc.).
+
+We trained a variety of different models with different hyperparameters and selected 5 for further testing. Parameters can be found on the github in \verb*|dataset/parms.ipynb|. All images were standardized at 224x224, using the SyRA synthesized rain test image set with a random augmentation pipeline. 
+
+All models were trained for 128 epochs over the WideResNet18 model with depth 16, widen factor 2, and dropout 1. Other architectures (within the ResNet family and VGG families) were tried as well. The model was trained on the 20 classes of UMD buildings, on Google Colab with a Tesla T4 GPU. All code is available on the github repository.
 
 \subsubsection{MeanTeacher}
 
-\subsection{GNNs/HITL/VQA Experiments}
+Our MeanTeacher model uses consistency regularization that requires 2 models: a student model and a teacher model. The teacher model is an exponential moving average of the student model, and the student model is trained to match the teacher model’s predictions.
 
+Our student network acts as the standard neural network, trained on both supervised and unsupervised losses. Our teacher network acts as the target for the student. 
+
+For labeled data, the student network is trained to minimize supervised loss via cross-entropy. For unlabeled data, the student network is trained to minimize the consistency loss between the student and teacher predictions.
+
+All data went to both of our models, where it was then augmented with random horizontal translations and translations (eg. weak augmentation). We utilized MSE loss for consistency loss in unlabeled data. For labeled data, we utilized the weights formula \begin{align*}
+    \theta_{\text{teacher}}=\alpha \cdot\theta_{\text{teacher}}+(1-\alpha)\cdot\theta_{\text{student}}
+\end{align*} where $\alpha=0.97$ is the decay rate. Final loss was calculated as \begin{align*}
+    \mathcal{L}_{\text{total}}=\mathcal{L}_{\text{supervised}}+\lambda\cdot\mathcal{L}_{\text{consistency}}
+\end{align*}where $\lambda=1.75$ was the weight of the consistency loss.
+
+The model was trained for 25 epochs over the WideResNet18 model. The model was trained on the 20 classes of UMD buildings, on Google Colab with a Tesla T4 GPU. All code is available on the github repository.
+
+\subsection{GNNs/HITL Experiments}
+
+We additionally experimented with GNNs (Graph Neural Networks), HITL (Human In The Loop), and VQA (Visual Question Answering) methods. Results for these can be found in appendix \ref{experiment_results}.
+
+VQA was found to be infeasible due to time constraints; the amount of questions required was too high given our priorities on semi supervised learning and the lack of time we allotted to the experiment.
 % results for these will go into appendix
+
+\subsubsection{HITL}
+
+HITL, or Human In The Loop, is a method to accelerate the training of a model by providing human feedback on the model's predictions. This can be used to help the model focus on areas of interest by providing absolute feedback on whether or not Grad-CAM is focusing on the correct areas.
+
+We implemented a model on 9 classes and a train set of 450 images, where humans were asked to provide feedback on the accuracy of class predictions and whether or not the Grad-CAM feedback was accurate (eg. not focusing on noise). The model was implemented for PyTorch and was trained on Colab with a Tesla T4 GPU for 10 epochs, with human interference once per epoch.
+
+A ResNet18 model was used, with 10 epochs, $lr=0.001$, batch size 64. 
 
 \subsubsection{GNNs}
 
-\subsubsection{HITL}
+Images for GNNs were standardized to 224x224, then ran through our custom implementation of the SLIC Superpixel transform to \verb*|torch_geometric(Data)| objects. Edges were generated via a Radius Neighbor Graph with varying parameters. The transform method is adapted from low resolution B/W to high resolution color images at variable resolution.
 
-\subsubsection{VQA}
+To visualize the model and SLIC transform, methods were written to represent the graph in 2d space.
 
-\section{Results}
+Our GNN classifier was implemented in PyTorch Geometric, following the method outlined in Long et al \cite{long}. The method uses a 3 layer GatConv model with a FC layer at the end. The model was initially trained on fully supervised data, but could not complete due to time constraints. Training was done on the Columbia \@ SAIL server with an NVIDIA RTX A6000 GPU. It is intended to train on 100 epochs, and a hidden dimension of 152. 
+
+The SLIC transform results in significant preprocessing costs, and was the main cost of the model. All code is available on the github repository, although no results are provided.
+
+\section{Experiment Results}
 \label{result}
-
-\subsection{Code}
-
-Code for models, data collection and augmentation, along with the SLIC methods and HITL methods, were written and implemented in pytorch and can be found on our Github repository: \url{https://github.com/BlueTurtle123/CMSC472_Final_Project}
+% Demonstrate stats
 
 \subsection{Fully Supervised Baseline}
 
-% Demonstrate stats
+We trained various ResNet/VGG models for the fully supervised baseline. After training, ResNet18 was determined to be the best model for semisupervised with a 97.63\% validation accuracy on the test set after 12 epochs. All training was done on the 20 classes of UMD buildings, on Google Colab with a Tesla T4 GPU. All code is available on the github repository.
 
+All testing was done on the heavily augmented test set to check for robustness, and the table below was generated at 10 epochs.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        Architecture & Val Accuracy & Test Accuracy \\
+        \hline
+        DenseNet121 & 97.47\% & 87.77\% \\
+        \hline
+        DenseNet201 & 95.26\% & 87.93\% \\
+        \hline
+        ResNet18 & 97.63\% & 88.54\% \\
+        \hline
+        ResNet34 & 98.89\% & 86.38\% \\
+        \hline
+        ResNet50 & 96.05\% & 80.13\% \\
+        \hline
+    \end{tabular}
+    \caption{Comparison of DenseNet/ResNet Model Accuracies}
+    \label{tab:dnrn_model_accuracies}
+\end{table}
+
+The following VGG/VIT models were also tested, but were found to be less effective than the ResNet models.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        Architecture & Val Accuracy & Test Accuracy \\
+        \hline
+        VGG11 & 84.36\% & 55.73\% \\
+        \hline
+        VGG16 & 79.94\% & 78.84\% \\
+        \hline
+        VGG19 & 80.09\% & 41.33\% \\
+        \hline
+        Vit16\_224 & 69.04\% & 42.62\% \\
+        \hline
+    \end{tabular}
+    \caption{Comparison of VGG/VIT Model Accuracies}
+    \label{tab:vgg_model_accuracies}
+\end{table}
 \subsection{Semi-Supervised Methods}
+\subsubsection{FixMatch}
 
+Our FixMatch method achieved peak top1 accuracy of 40.45\% and top5 accuracy of 75.44\%, where top1 indicates a correct guess within the most confident prediction and top5 indicating a correct guess on the top 5 most confident predictions.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        Model & Top-1 Accuracy & Top-5 Accuracy \\
+        \hline
+        1 & 27.95\% & 61.25\% \\
+        \hline
+        2 & 30.44\% & 64.50\% \\
+        \hline
+        3 & 38.75\% & 75.08\% \\
+        \hline
+        4 & 40.45\% & 75.44\% \\
+        \hline
+        5 & 19.20\% & 68.37\% \\
+        \hline
+    \end{tabular}
+    \caption{Comparison of Model Accuracies}
+    \label{tab:fm_model_accuracies}
+\end{table}
+
+The FixMatch model fell into the issue of overfitting on our dataset fairly quickly due to the relatively small per-class dataset. This was exacerbated by the limited weather conditions and time of day we took photos, which resulted in a lack of diversity and strong overfitting on nonexistent features. 
+
+However, we were successful in locking Grad-CAM onto building features, and we achieved reasonable test accuracies on the heavily augmented SyRA test set.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{fixmatch.png}
+    \caption{FixMatch Model Grad-CAM visualization}
+    \label{fig:fixmatch_results}
+\end{figure}
+
+\subsubsection{MeanTeacher}
+
+Our MeanTeacher model achieved top1 student accuracy of 75.08\% and top1 teacher accuracy of 73.89\%. This utilized $\lambda=1.5, \alpha=.99$, with batch size $0.001$, SGD decay $10^{-4}$, and momentum $.9$ over 20 epochs.
+
+The MeanTeacher model performed significantly better than the FixMatch model due to its consistency regularization. The model was able to generalize better to the test set and was less prone to overfitting. 
+
+However, it still suffered from the same lack of diversity. Once again, we were successful in locking Grad-CAM onto building features, and we achieved reasonable test accuracies on the heavily augmented SyRA test set.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[trim={0 38cm 0 12.5cm},clip,width=0.6\linewidth]{meanteacher.png}
+    \caption{MeanTeacher Model Grad-CAM visualization}
+    \label{fig:meanteacher_results}
+\end{figure}
 % Demonstrate stats
 
-\subsection{Other Experiments}
+\section{Conclusion}
 
-\subsubsection{HITL}
+Our key findings are that for the classification of buildings, ResNet18 is the best baseline model; and that MeanTeacher outperformed FixMatch considerably, achieving a top1 student accuracy of 75.08\% and top1 teacher accuracy of 73.89\%. Extensive quantitative findings prove that it's also much more robust to overfitting than FixMatch, and reacts better to an augmented test set. For both, we were successful in locking Grad-CAM onto building features. 
 
-\subsubsection{GNN SLIC Transform}
+However, both models suffered from a lack of diversity in the dataset, which led to overfitting on nonexistent features and a lack of improvement. This was exacerbated by the limited weather conditions and time of day we took photos, which resulted in a lack of diversity and strong overfitting on nonexistent features. Additionally, weather augmentation was not as diverse as might be necessary to prove robustness to real world conditions.
 
-% quick overview of new transform and then note results in appendix
+Future research will focus on increasing the diversity of the dataset, along with continuing preliminary work on GNNs. 
 
-\subsubsection{VQA}
+\subsection*{GitHub Repository}
 
-% quick overview of VQA and then note results in appendix
+All code and resources for this project are available at: \url{https://github.com/BlueTurtle123/CMSC472_Final_Project}
 
 \newpage 
 \appendix
 
-\section{Extra Figures}
+\section{Extra Experiment Results}
+\label{experiment_results}
+
+\subsection{HITL}
+
+After 10 epochs, the model achieved training accuracy $93.74\%$, and test accuracy $67.6\%$. 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{fig2.png}
-    \caption{Preliminary Results with structure from ResNet}
-    \label{fig:prelim_results_2}
+    \includegraphics[width=0.8\linewidth]{hitl.png}
+    \caption{HITL Model Grad-CAM visualization}
+    \label{fig:hitl_results}
 \end{figure}
+
+\subsection{GNNs}
+
+The GNN model was unable to complete training due to time constraints. However, we did complete our SLIC transform, for which we have the following figures:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{slic_1.png}
+    \caption{SLIC transform of Art-Sociology building picture}
+    \label{fig:slic1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{slic_2.png}
+    \caption{SLIC transform of Iribe building picture}
+    \label{fig:slic2}
+\end{figure}
+
+Note how in the pictures, excessive complexity is granted to largely irrelevant details, such as the clouds and sky. Minute differences in the image data due to noise result in a lack of clustering in those areas. 
+
+\section{Extra Figures}
+\label{extra_figures}
+
 
 \medskip
 

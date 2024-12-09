@@ -51,9 +51,4 @@ A.~Tarvainen and H.~Valpola.
 \newblock Weight-averaged consistency targets improve semi-supervised deep learning results.
 \newblock {\em CoRR}, abs/1703.01780, 2017.
 
-\bibitem{wang}
-H.~Wang, Z.~Wang, M.~Du, F.~Yang, Z.~Zhang, S.~Ding, P.~Mardziel, and X.~Hu.
-\newblock Score-cam: Score-weighted visual explanations for convolutional neural networks.
-\newblock 2020.
-
 \end{thebibliography}

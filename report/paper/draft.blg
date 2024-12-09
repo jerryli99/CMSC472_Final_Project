@@ -7,46 +7,45 @@ Warning--empty journal in he
 Warning--empty journal in selvaraju
 Warning--empty journal in simonyan
 Warning--empty journal in sohn
-Warning--empty journal in wang
-You've used 11 entries,
+You've used 10 entries,
             2118 wiz_defined-function locations,
-            555 strings with 5679 characters,
-and the built_in function-call counts, 3876 in all, are:
-= -- 344
-> -- 267
+            552 strings with 5480 characters,
+and the built_in function-call counts, 3451 in all, are:
+= -- 310
+> -- 224
 < -- 1
-+ -- 106
-- -- 94
-* -- 290
-:= -- 690
-add.period$ -- 34
-call.type$ -- 11
-change.case$ -- 80
++ -- 89
+- -- 78
+* -- 253
+:= -- 610
+add.period$ -- 31
+call.type$ -- 10
+change.case$ -- 69
 chr.to.int$ -- 0
-cite$ -- 16
-duplicate$ -- 123
-empty$ -- 245
-format.name$ -- 94
-if$ -- 765
+cite$ -- 14
+duplicate$ -- 113
+empty$ -- 228
+format.name$ -- 78
+if$ -- 688
 int.to.chr$ -- 0
-int.to.str$ -- 11
-missing$ -- 10
-newline$ -- 59
-num.names$ -- 22
-pop$ -- 91
+int.to.str$ -- 10
+missing$ -- 9
+newline$ -- 54
+num.names$ -- 20
+pop$ -- 78
 preamble$ -- 1
-purify$ -- 69
+purify$ -- 59
 quote$ -- 0
-skip$ -- 90
+skip$ -- 83
 stack$ -- 0
-substring$ -- 144
+substring$ -- 139
 swap$ -- 16
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 44
-warning$ -- 5
-while$ -- 27
-width$ -- 13
-write$ -- 113
-(There were 5 warnings)
+type$ -- 40
+warning$ -- 4
+while$ -- 25
+width$ -- 12
+write$ -- 104
+(There were 4 warnings)
