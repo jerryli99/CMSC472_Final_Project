@@ -1,4 +1,6 @@
 ## CMSC472_Final_Project
+<strong>People who participated in this project are: Jerry Li, Can Li, Jeffery Tian</strong>
+
 
 Progress log:
 
